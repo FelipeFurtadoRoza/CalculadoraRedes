@@ -1,0 +1,56 @@
+body {
+    width: 100%;
+}
+
+header {
+    width: 100%;
+}
+
+main {
+    padding: 1%;
+    border: 1px black solid;
+    height: 500px;
+    width: 50%;
+    margin-left: 25%;
+}
+
+#botoes {   
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#formula {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#box {
+    display: flex;
+    flex-wrap:wrap;
+    flex-direction: column;
+}
+
+#calcula {
+    width: 100%;
+    display: flex;
+    justify-content:center;
+    margin-top: 5%;
+}
+
+.input-valor {
+    float: left;
+}
+
+.botoes{
+    flex-grow: 1;
+    min-height: 20px;
+    max-height: 30px;
+    min-width: 6.25%;
+    border: 2px black solid;
+    text-align: center;
+    padding: 15px;
+}
+
+.botoes:hover {
+    cursor: pointer;
+}
