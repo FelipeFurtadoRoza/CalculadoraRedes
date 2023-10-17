@@ -2,6 +2,15 @@ const arrayCamposFormulas = {Shannon: ['larguraDeBanda', 'sinalRuido']};
 const regex = "['\"´`[{}\]~^:;.>,<|\-+.?=.*[@!#$%^&*()\/\\a-zA-Z\s+\/g]+";
 const formulaAtual = '';
 
+var myFunction = function() {
+    if(regex.includes(event.key)) {
+        console.log(event);
+        //return false
+    } else {
+        console.log(event);
+    }
+};
+
 window.onload = (event) => {
     let botoes = document.getElementById('botoes');
     let arrayNomeFormulas = ["Shannon", "Nyquist", "MW_Para_dBm", "DBm_Para_Mw", "EIRP", "FSLP", "RSL", "Fresnel"];
@@ -12,17 +21,17 @@ window.onload = (event) => {
     });
 };
 
-document.addEventListener("keypress", function(event) {
-    //console.log(event.key);
-    if(regex.includes(event.key)) {
-        console.log(event);
-        return false
-    }
-});
-
 function MudaFormula (formula) {
-    //CreateBox(window[formula](true).split(";"), formula);
     CreateBox(formula(true).split(";"), formula);
+
+    var classname = document.getElementsByClassName("campo-formula");
+
+    console.log(classname);
+
+    classname.forEach(element => {  
+        element.addEventListener('keyDown', myFunction, false);
+        console.log('asd');  
+    });  
 }
 
 function CreateBox (camposFormula, formula) {
@@ -45,8 +54,7 @@ function Calcula (formula) {
         valoresFormula.push(document.getElementById(element).value);
     });
     console.log(formula(false, valoresFormula));
-    document.getElementById('Resultado').innerText = formula(false, valoresFormula);
-
+    document.getElementById('Resultado').innerText = formula(false, valoresFormula).toFixed(2);
 }
 
 function Shannon (formula, valoresFormula) {
