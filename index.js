@@ -1,5 +1,4 @@
 const arrayCamposFormulas = {Shannon: ['larguraDeBanda', 'sinalRuido']};
-const regex = "['\"´`[{}\]~^:;.>,<|\-+.?=.*[@!#$%^&*()\/\\a-zA-Z\s+\/g]+";
 const formulaAtual = '';
 
 window.onload = (event) => {
@@ -15,21 +14,15 @@ window.onload = (event) => {
 function MudaFormula (formula) {
     CreateBox(formula(true).split(";"), formula);
 
-    // var classname = document.getElementsByClassName("campo-formula");
-
-    // classname.forEach(element => {  
-    //     element.addEventListener('keyDown', validarRegex);
-    //     console.log('asd');
-    // });  
-
-    var elements = document.getElementsByClassName("campo-formula")
-
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].addEventListener('keypress', (event) => {
-            if(regex.match(event.key)) {
-                return false
+    var inputs = document.getElementsByClassName("campo-formula");
+    //const regex = new RegExp("/^['\"´`[{}\]~^:;.>,<|\-+.?=.*[@!#$%^&*()\/\\a-zA-Z\s+\/g]+");
+    const regexNumero = /^[0-9]$/;
+    
+    for (const input of inputs) {
+        input.addEventListener("keydown", (event) => {
+            if(regexNumero.test(event.key)) {
             } else {
-                console.log(event);
+                event.preventDefault();
             }
         }, false);
     }
