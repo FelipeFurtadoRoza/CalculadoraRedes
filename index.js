@@ -2,15 +2,6 @@ const arrayCamposFormulas = {Shannon: ['larguraDeBanda', 'sinalRuido']};
 const regex = "['\"´`[{}\]~^:;.>,<|\-+.?=.*[@!#$%^&*()\/\\a-zA-Z\s+\/g]+";
 const formulaAtual = '';
 
-var myFunction = function() {
-    if(regex.includes(event.key)) {
-        console.log(event);
-        //return false
-    } else {
-        console.log(event);
-    }
-};
-
 window.onload = (event) => {
     let botoes = document.getElementById('botoes');
     let arrayNomeFormulas = ["Shannon", "Nyquist", "MW_Para_dBm", "DBm_Para_Mw", "EIRP", "FSLP", "RSL", "Fresnel"];
@@ -24,14 +15,24 @@ window.onload = (event) => {
 function MudaFormula (formula) {
     CreateBox(formula(true).split(";"), formula);
 
-    var classname = document.getElementsByClassName("campo-formula");
+    // var classname = document.getElementsByClassName("campo-formula");
 
-    console.log(classname);
+    // classname.forEach(element => {  
+    //     element.addEventListener('keyDown', validarRegex);
+    //     console.log('asd');
+    // });  
 
-    classname.forEach(element => {  
-        element.addEventListener('keyDown', myFunction, false);
-        console.log('asd');  
-    });  
+    var elements = document.getElementsByClassName("campo-formula")
+
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].addEventListener('keypress', (event) => {
+            if(regex.match(event.key)) {
+                return false
+            } else {
+                console.log(event);
+            }
+        }, false);
+    }
 }
 
 function CreateBox (camposFormula, formula) {
@@ -39,7 +40,7 @@ function CreateBox (camposFormula, formula) {
     let campos = "";
 
     camposFormula.forEach(element => {
-        campos += "<div class='input-valor'><label id='label_" + element +"'>" + element + ": </label><input id='" + element + "' class='campo-formula' type='text'></div>";
+        campos += "<div class='input-valor'><label id='label_" + element +"'>" + element + ": </label><input id='" + element + "' class='campo-formula' required='required' pattern='[0-9]+$' type='text'></div>";
     });
 
     console.log(formula);
