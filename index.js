@@ -15,14 +15,14 @@ function MudaFormula (formula) {
     CreateBox(formula(true).split(";"), formula);
 
     var inputs = document.getElementsByClassName("campo-formula");
-    //const regex = new RegExp("/^['\"´`[{}\]~^:;.>,<|\-+.?=.*[@!#$%^&*()\/\\a-zA-Z\s+\/g]+");
-    const regexNumero = /^[0-9]$/;
+    const regexNumero = /[\d.]|[\b]/;
     
     for (const input of inputs) {
         input.addEventListener("keydown", (event) => {
-            if(regexNumero.test(event.key)) {
-            } else {
+            if(!regexNumero.test(event.key) && event.which != 9 && event.which != 8) {
                 event.preventDefault();
+            } else {
+                console.log(event);
             }
         }, false);
     }
@@ -39,6 +39,7 @@ function CreateBox (camposFormula, formula) {
     console.log(formula);
     document.getElementById('calcula').innerHTML = "<input type='button' Value='Calcular' onClick='Calcula(" + formula + ");'>";
     content.innerHTML = campos;
+    document.getElementById("Resultado").innerText = '';
 }
 
 function Calcula (formula) {
@@ -54,93 +55,93 @@ function Calcula (formula) {
 function Shannon (formula, valoresFormula) {
     if (formula) {
         const form = document.getElementById("formulaAtual");
-        form.innerHTML = "<h3>Formula:</h3> (<b>Largura de banda</b> * log10(1 + <b>Sinal/Ruido</b>))";
+        form.innerHTML = "<h3>Formula:</h3> <b>Largura de banda</b> * log10(1 + <b>Sinal/Ruido</b>)";
         return "Largura De Banda;Sinal/Ruido";
     } else {
-        let larguraDeBanda = valoresFormula[0];
-        let sinalRuido = valoresFormula[1];
+        let larguraDeBanda = Number(valoresFormula[0]);
+        let sinalRuido = Number(valoresFormula[1]);
         
-        return capacidadeMaximaCanal = (larguraDeBanda * Math.log10(1 + sinalRuido));
+        return capacidadeMaximaCanal = larguraDeBanda * Math.log10(1 + sinalRuido);
     }
 }
 
 function Nyquist (formula, valoresFormula) {
     if (formula){
         const form = document.getElementById("formulaAtual");
-        form.innerHTML = "<h3>Formula:</h3> (2 * <b>Largura de banda do Sinal</b> * <b>Ondulação</b>)";
+        form.innerHTML = "<h3>Formula:</h3> 2 * <b>Largura de banda do Sinal</b> * <b>Ondulação</b>";
         return "Largura de Banda do Sinal;Ondulação";
     } else {
-        let larguraDeBandaSinal = valoresFormula[0];
-        let ondulacao = valoresFormula[1];
+        let larguraDeBandaSinal = Number(valoresFormula[0]);
+        let ondulacao = Number(valoresFormula[1]);
 
-        return taxaNyquist = (2 * larguraDeBandaSinal * ondulacao); 
+        return taxaNyquist = 2 * larguraDeBandaSinal * ondulacao; 
     }
 }
 
 function MW_Para_dBm (formula, valoresFormula) {
     if(formula){
         const form = document.getElementById("formulaAtual");
-        form.innerHTML = "<h3>Formula:</h3> (10 * Log10(<b>Potencia em Mw</b>))";
+        form.innerHTML = "<h3>Formula:</h3> 10 * Log10(<b>Potencia em Mw</b>)";
         return "Potencia em Mw";
     } else {
-        let potenciaMw = valoresFormula[0];
+        let potenciaMw = Number(valoresFormula[0]);
 
-        return potenciaDBm = (10 * Math.log10(potenciaMw));
+        return potenciaDBm = 10 * Math.log10(potenciaMw);
     }
 }
 
 function DBm_Para_Mw (formula, valoresFormula) {
     if(formula){
         const form = document.getElementById("formulaAtual");
-        form.innerHTML = "<h3>Formula:</h3> (10^<b>Potencia em dBm</b> / 10)";
+        form.innerHTML = "<h3>Formula:</h3> 10^<b>Potencia em dBm</b> / 10";
         return "Potencia em dBm";
     } else {
-        let potenciaDBm = valoresFormula[0];
-        return potencia = (Math.pow(10, (potenciaDBm/10)));
+        let potenciaDBm = Number(valoresFormula[0]);
+        return potencia = Math.pow(10, (potenciaDBm/10));
     }
 }
 
 function EIRP (formula, valoresFormula) {
     if(formula){
         const form = document.getElementById("formulaAtual");
-        form.innerHTML = "<h3>Formula:</h3> (<b>Potencia de Transmissão</b> + <b>Ganho da Antena</b> - <b>Perda do Cabo</b>)";
+        form.innerHTML = "<h3>Formula:</h3> <b>Potencia de Transmissão</b> + <b>Ganho da Antena</b> - <b>Perda do Cabo</b>";
         return "Potencia de Transmissão;Ganho da Antena;Perda do Cabo"
     } else {
-        let potenciaTransmissao = valoresFormula[0];
-        let ganhoAntena = valoresFormula[1];
-        let perdaCabo = valoresFormula[2];
+        let potenciaTransmissao = Number(valoresFormula[0]);
+        let ganhoAntena = Number(valoresFormula[1]);
+        let perdaCabo = Number(valoresFormula[2]);
 
-        return EIRP = (potenciaTransmissao + ganhoAntena - perdaCabo);
+        return EIRP = potenciaTransmissao + ganhoAntena - perdaCabo;
     }
 }
 
 function FSLP (formula, valoresFormula) {
     if(formula){
         const form = document.getElementById("formulaAtual");
-        form.innerHTML = "<h3>Formula:</h3> (32.4 + ((20 * Log10(<b>Distancia em KM</b>)) + (20 * log10(<b>Frequencia em MHz</b>))))";
+        form.innerHTML = "<h3>Formula:</h3> 32.4 + ((20 * Log10(<b>Distancia em KM</b>)) + (20 * log10(<b>Frequencia em MHz</b>)))";
         return "Distancia em KM;Frequencia em MHz"
     } else {
-        let distanciaKm = valoresFormula[0];
-        let frequenciaMHz = valoresFormula[1];
+        let distanciaKm = Number(valoresFormula[0]);
+        let frequenciaMHz = Number(valoresFormula[1]);
 
-        return fslp = (32.4 + ((20 * Math.log10(converteKm(distanciaKm)) + (20 * Math.log10(frequenciaMHz)))));
+        return fslp = 32.4 + (20 * Math.log10(distanciaKm) + 20 * Math.log10(frequenciaMHz));
     }
 }
 
 function RSL (formula, valoresFormula) {
     if(formula){
         const form = document.getElementById("formulaAtual");
-        form.innerHTML = "<h3>Formula:</h3> (<b>Potencia de Transmissão</b> + (<b>Ganho da Antena X</b> - <b>Perda do Cabo X</b>) - <b>fslp</b> + (<b>Ganho da Antena Y</b> - <b>Perda do Cabo Y</b>))";
+        form.innerHTML = "<h3>Formula:</h3> <b>Potencia de Transmissão</b> + (<b>Ganho da Antena X</b> - <b>Perda do Cabo X</b>) - <b>fslp</b> + (<b>Ganho da Antena Y</b> - <b>Perda do Cabo Y</b>)";
         return "Potencia de Transmissão;Ganho da Antena X;Perda do Cabo X;Ganho da Antena Y;Perda do Cabo Y;FSLP";
     } else {
-        let potenciaTransmissao = valoresFormula[0];
-        let ganhoAntenaX = valoresFormula[1];
-        let perdaCaboX = valoresFormula[2];
-        let ganhoAntenaY = valoresFormula[3];
-        let perdaCaboY = valoresFormula[4];
-        let fslp = valoresFormula[5];
+        let potenciaTransmissao = Number(valoresFormula[0]);
+        let ganhoAntenaX = Number(valoresFormula[1]);
+        let perdaCaboX = Number(valoresFormula[2]);
+        let ganhoAntenaY = Number(valoresFormula[3]);
+        let perdaCaboY = Number(valoresFormula[4]);
+        let fslp = Number(valoresFormula[5]);
 
-        return rsl  = (potenciaTransmissao + (ganhoAntenaX - perdaCaboX) - fslp + (ganhoAntenaY - perdaCaboY));
+        return rsl  = potenciaTransmissao + (ganhoAntenaX - perdaCaboX) - fslp + (ganhoAntenaY - perdaCaboY);
     }
 }
 
@@ -151,15 +152,13 @@ function Fresnel (formula, valoresFormula) {
         return "DAO;DBO;Distancia em KM;Frequencia em MHz";
     } else {
         
-        let DAO = valoresFormula[0];
-        let DBO = valoresFormula[1];
-        let distanciaKm = valoresFormula[2];
-        let frequenciaMHz = valoresFormula[3];
+        let DAO = Number(valoresFormula[0]);
+        let DBO = Number(valoresFormula[1]);
+        let distanciaKm = Number(valoresFormula[2]);
+        let frequenciaMHz = Number(valoresFormula[3]);
 
-        return fresnel = (550 * Math.sqrt(((DAO * DBO) / (converteKm(distanciaKm) * frequenciaMHz))));
+        console.log(DAO + " " + DBO + " " + distanciaKm + " " + frequenciaMHz);
+
+        return fresnel = 550 * Math.sqrt((Number(DAO) * Number(DBO)) / (Number(distanciaKm) * Number(frequenciaMHz)));
     }
-}
-
-function converteKm (distanciaKm) {
-    return (distanciaKm / 1000);
 }
