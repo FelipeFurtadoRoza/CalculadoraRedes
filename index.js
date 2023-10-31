@@ -1,5 +1,6 @@
 const arrayCamposFormulas = {Shannon: ['larguraDeBanda', 'sinalRuido']};
 const formulaAtual = '';
+var valorMinimo = 0;
 
 window.onload = (event) => {
     let botoes = document.getElementById('botoes');
@@ -14,6 +15,7 @@ window.onload = (event) => {
 function MudaFormula (formula) {
     CreateBox(formula(true).split(";"), formula);
 
+    valorMinimo = 0;
     var inputs = document.getElementsByClassName("campo-formula");
     const regexNumero = /[\d.]|[\b]/;
     
@@ -48,8 +50,13 @@ function Calcula (formula) {
     formula(true).split(";").forEach(element => {
         valoresFormula.push(document.getElementById(element).value);
     });
-    console.log(formula(false, valoresFormula));
-    document.getElementById('Resultado').innerText = formula(false, valoresFormula).toFixed(2);
+
+    let resultado = formula(false, valoresFormula).toFixed(2);
+
+    if(valorMinimo != 0) 
+        document.getElementById('Resultado').innerText = resultado + " Valor minimo: " + valorMinimo.toFixed(2);
+    else
+        document.getElementById('Resultado').innerText = resultado;
 }
 
 function Shannon (formula, valoresFormula) {
@@ -61,7 +68,7 @@ function Shannon (formula, valoresFormula) {
         let larguraDeBanda = Number(valoresFormula[0]);
         let sinalRuido = Number(valoresFormula[1]);
         
-        return capacidadeMaximaCanal = larguraDeBanda * Math.log10(1 + sinalRuido);
+        return capacidadeMaximaCanal = larguraDeBanda * Math.log2(1 + Math.pow(10, sinalRuido / 10));
     }
 }
 
@@ -159,6 +166,12 @@ function Fresnel (formula, valoresFormula) {
 
         console.log(DAO + " " + DBO + " " + distanciaKm + " " + frequenciaMHz);
 
-        return fresnel = 550 * Math.sqrt((Number(DAO) * Number(DBO)) / (Number(distanciaKm) * Number(frequenciaMHz)));
+        fresnel = 550 * Math.sqrt((Number(DAO) * Number(DBO)) / (Number(distanciaKm) * Number(frequenciaMHz)));
+
+        if(frequenciaMHz <= 3000) {
+            valorMinimo = Number(fresnel * 0.6);
+        }
+        
+        return fresnel;
     }
 }
